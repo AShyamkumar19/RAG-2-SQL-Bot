@@ -16,6 +16,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 CHROMA_PATH = "chroma"
 DATA_PATH = "./data"
+JSON_FILE = "./knowledge.json"
 
 # Docker MySQL connection parameters
 user = 'root'
@@ -30,55 +31,36 @@ def main():
     generate_data_store()
 
 def generate_data_store():
-    sql_data = load_sql_data_as_json()  # Load data from SQL and convert to JSON
-    chunks = split_text(sql_data)
+    schema_data = load_json_file(JSON_FILE)
+    chunks = split_text(schema_data)
     save_to_chroma(chunks)
 
-def load_sql_data_as_json():
-    inspector = inspect(engine)
-    tables = inspector.get_table_names()
+def load_json_file(json_file_path):
+    with open(json_file_path, 'r') as file:
+        json_content = json.load(file)
+    
+    # Convert the loaded JSON into Document objects
+    schema_data = []
+    for table_name, table_info in json_content.items():
+        document_content = json.dumps(table_info, indent=4)
+        metadata = {"table_name": table_name}
+        schema_data.append(Document(page_content=document_content, metadata=metadata))
+    
+    return schema_data
 
-    sql_data = []
-
-    for table in tables:
-        # Get table schema
-        columns = inspector.get_columns(table)
-        schema = {col['name']: str(col['type']) for col in columns}
-
-        # Get data dictionary (e.g., column descriptions or other metadata)
-        # In a real scenario, this could come from an external source or be hardcoded
-        data_dictionary = {col['name']: f"Description of {col['name']}" for col in columns} # Example, needs changes
-
-        # Contextual information (could be custom metadata)
-        contextual_info = {
-            "table_name": table,
-            "description": f"This table contains information about {table}.",
-            "row_count": engine.execute(f"SELECT COUNT(*) FROM stock_data;").scalar(),
-        }
-
-        # Combine into a single JSON object
-        json_content = json.dumps({
-            "schema": schema,
-            "data_dictionary": data_dictionary,
-            "context": contextual_info
-        }, indent=4)
-
-        # Create a Document object
-        metadata = {"table_name": table}
-        sql_data.append(Document(page_content=json_content, metadata=metadata))
-
-    return sql_data
-
-def split_text(sql_data: list[Document]):
+def split_text(schema_data: list[Document]):
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=300,
+        chunk_size=1000,  
         chunk_overlap=100,
         length_function=len,
         add_start_index=True,
     )
-    chunks = text_splitter.split_documents(sql_data)
-    print(f"Split {len(sql_data)} documents into {len(chunks)} chunks.")
+    
+    # Split each document into chunks
+    chunks = text_splitter.split_documents(schema_data)
+    print(f"Split {len(schema_data)} documents into {len(chunks)} chunks.")
 
+    # Print a sample chunk to verify the output
     document = chunks[10] if len(chunks) > 10 else chunks[0]
     print(document.page_content)
     print(document.metadata)
@@ -86,11 +68,11 @@ def split_text(sql_data: list[Document]):
     return chunks
 
 def save_to_chroma(chunks: list[Document]):
-    # Clear out the database first.
+    # Clear out the existing database first
     if os.path.exists(CHROMA_PATH):
         shutil.rmtree(CHROMA_PATH)
 
-    # Create a new DB from the documents.
+    # Create a new Chroma vector database from the documents
     db = Chroma.from_documents(
         chunks, OpenAIEmbeddings(), persist_directory=CHROMA_PATH
     )

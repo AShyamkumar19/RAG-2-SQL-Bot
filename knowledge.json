@@ -1,0 +1,86 @@
+{
+    "Table_1": {
+        "Table_Name": "stock_exchange",
+        "Table_Description": "This table contains a list of stock exchanges",
+        "Table_Columns": [
+            {
+                "Col_Name": "id",
+                "Col_Type": "INT",
+                "Col_Description": "Primary Key, unique identifier for the stock exchange",
+                "Metadata": "Example: 1, 2, 3, etc."
+            },
+            {
+                "Col_Name": "name",
+                "Col_Type": "VARCHAR(255)",
+                "Col_Description": "Name of the stock exchange.",
+                "Metadata": "Example: nasdaq, nyse, forbes2000, sp500"
+            }
+        ]
+    },
+    "Table_2": {
+        "Table_Name": "stock",
+        "Table_Description": "This table contains the historical stock data for every stock for different exchanges.",
+        "Table_Columns": [
+            {
+                "Col_Name": "id",
+                "Col_Type": "INT",
+                "Col_Description": "Primary Key, unique identifier for the stock",
+                "Metadata": "Example: 1, 2, 3, etc."
+            },
+            {
+                "Col_Name": "name",
+                "Col_Type": "VARCHAR(255)",
+                "Col_Description": "Name of the stock.",
+                "Metadata": "Example: AAPL, GOOGL, AMZN, etc."
+            },
+            {
+                "Col_Name": "date",
+                "Col_Type": "DATE   ",
+                "Col_Description": "The date of the stock price.",
+                "Metadata": "Example: '2024-08-27', '2023-06-15'."
+            },
+            {
+                "Col_Name": "low",
+                "Col_Type": "FLOAT",
+                "Col_Description": "The lowest price of the stock on that given day.",
+                "Metadata": "Example: 100.00, 120.43, 15.75, etc."
+            },
+            {
+                "Col_Name": "open",
+                "Col_Type": "FLOAT",
+                "Col_Description": "The opening price of the stock on that given day.",
+                "Metadata": "Example: 100.00, 120.43, 15.75, etc."
+            },
+            {
+                "Col_Name": "volume",
+                "Col_Type": "BIGINT",
+                "Col_Description": "The total number of shares traded on that specific day.",
+                "Metadata": "Example: 100000, 200000, 300000, etc."
+            },
+            {
+                "Col_Name": "high",
+                "Col_Type": "FLOAT",
+                "Col_Description": "The highest price of the stock on that given day.",
+                "Metadata": "Example: 152.80, 125.00, 102.34."
+            },
+            {
+                "Col_Name": "close",
+                "Col_Type": "FLOAT",
+                "Col_Description": "The closing price of the stock on that given day.",
+                "Metadata": "Example: 150.75, 119.50, 100.90."
+            },
+            {
+                "Col_Name": "adjusted_close",
+                "Col_Type": "FLOAT",
+                "Col_Description": "The closing price of the stock adjusted for dividends and splits.",
+                "Metadata": "Example: 11.65, 19.53, 10.90."
+            },
+            {
+                "Col_Name": "stock_exchange_id",
+                "Col_Type": "INT",
+                "Col_Description": "Foreign key referencing the id of the stock exchange in the stock_exchange table.",
+                "Metadata": "Example: 1, 2, 3, etc."
+            }
+        ]
+    }
+}

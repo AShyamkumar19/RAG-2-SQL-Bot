@@ -33,26 +33,15 @@ for exchange_name, exchange_id in exchange_ids.items():
         for csv_file in os.listdir(csv_directory):
             if csv_file.endswith('.csv'):
                 file_path = os.path.join(csv_directory, csv_file)
-                stock_name = os.path.splitext(csv_file)[0]  # Use the file name (without extension) as the stock name
+                stock_name = os.path.splitext(csv_file)[0]
 
                 try:
-                    # Read the CSV file into a pandas DataFrame
                     df = pd.read_csv(file_path, on_bad_lines='skip')
-
-                    # Convert 'Date' column to datetime object if necessary
                     df['Date'] = pd.to_datetime(df['Date'], format='%d-%m-%Y', errors='coerce')
-
-                    # Rename the columns to match your MySQL table schema
                     df.columns = ['date', 'low', 'open', 'volume', 'high', 'close', 'adjusted_close']
-
-                    # Add additional columns to the DataFrame
                     df['name'] = stock_name
                     df['stock_exchange_id'] = exchange_id
-
-                    # Drop rows where the 'date' column could not be converted
                     df = df.dropna(subset=['date'])
-
-                    # Insert data into the MySQL database
                     df.to_sql(name='stock_data', con=engine, if_exists='append', index=False)
 
                     print(f"Data from {csv_file} in {exchange_name} has been successfully inserted into the stock_data table.")
