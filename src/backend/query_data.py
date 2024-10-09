@@ -6,11 +6,12 @@ from sqlalchemy import create_engine
 import pandas as pd
 from dotenv import load_dotenv
 import os
+import getpass
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-CHROMA_PATH = "chroma"
+CHROMA_PATH = "src/backend/chroma"
 
 # MySQL connection parameters (Docker)
 user = 'root'
@@ -59,16 +60,14 @@ def generate_sql_query(chroma_result):
     Here, you would extract the table name and column names from the Chroma result (schema info).
     Based on this, you can generate the SQL query.
     """
-    # Example: If the schema information indicates the "stock_data" table
     if "stock_data" in chroma_result:
-        return "SELECT * FROM stock_data LIMIT 10;"  # Example SQL query
+        return "SELECT * FROM stock_data LIMIT 10;"  
     else:
         return None
 
 def execute_sql_query(sql_query: str):
-    # Execute SQL query on MySQL database
     try:
-        df = pd.read_sql(sql_query, engine)  # Use pandas to run the query and fetch results
+        df = pd.read_sql(sql_query, engine)  
         return df
     except Exception as e:
         print("Error executing SQL query:", e)

@@ -14,9 +14,10 @@ import json
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-CHROMA_PATH = "chroma"
+CHROMA_PATH = "src/backend/chroma"
 DATA_PATH = "./data"
-JSON_FILE = "./knowledge.json"
+JSON_FILE = "src/backend/knowledge.json"
+
 
 # Docker MySQL connection parameters
 user = 'root'
