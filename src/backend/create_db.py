@@ -20,10 +20,10 @@ JSON_FILE = "src/backend/knowledge.json"
 
 
 # Docker MySQL connection parameters
-user = 'root'
+user = os.getenv("DB_USER")
 password = os.getenv("DB_PASSWORD")
-host = 'localhost'  # Or use the Docker container's IP address or name if running within Docker
-database = 'stock_info'
+host = os.getenv("DB_HOST")  
+database = os.getenv("DB_db")
 
 # Create SQLAlchemy engine
 engine = create_engine(f'mysql+pymysql://{user}:{password}@{host}/{database}')
