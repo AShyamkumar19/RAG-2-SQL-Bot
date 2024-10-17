@@ -1,5 +1,5 @@
-from langchain_chroma import Chroma  # Updated import for Chroma
-from langchain_openai import OpenAIEmbeddings  # Updated import for OpenAIEmbeddings
+from langchain_chroma import Chroma 
+from langchain_openai import OpenAIEmbeddings 
 from langchain.embeddings.openai import OpenAIEmbeddings
 import mysql.connector
 from mysql.connector import Error
@@ -7,17 +7,15 @@ from sqlalchemy import create_engine, text
 import openai
 import os
 
-# Set the OpenAI API key
+
 openai.api_key = os.getenv("OPENAI_API_KEY")
 user = os.getenv("DB_USER")
 password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
 database = os.getenv("DB_db")
 
-# Set up the SQLAlchemy engine for MySQL
 engine = create_engine(f'mysql+pymysql://{user}:{password}@{host}/{database}')
 
-# Initialize the Chroma vector store
 embedding = OpenAIEmbeddings()
 vector_store = Chroma(persist_directory='data\\chroma', embedding_function=embedding)
 
@@ -37,7 +35,7 @@ def text_to_sql_with_chroma(natural_language_query):
 
     try:
         response = openai.ChatCompletion.create(  
-            model="gpt-4",  # Chat model
+            model="gpt-4",  
             messages=[
                 {"role": "system", "content": f"You are a helpful assistant with access to the following database schema: {schema_info}. Convert the following natural language query into a SQL query."},
                 {"role": "user", "content": natural_language_query}
