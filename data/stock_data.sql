@@ -37,6 +37,10 @@ FROM stock_exchange;
 SELECT *
 FROM stock_data;
 
+SELECT name, volume
+FROM stock_data
+ORDER BY volume DESC
+LIMIT 5;
 
 -- SHOW DATABASES;
 

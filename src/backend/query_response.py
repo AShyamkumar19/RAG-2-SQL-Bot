@@ -21,9 +21,9 @@ vector_store = Chroma(persist_directory='data\\chroma', embedding_function=embed
 
 # Function to get schema information from Chroma
 def get_schema_info_from_chroma(query):
-    retrieved_docs = vector_store.similarity_search(query, k=1)
+    retrieved_docs = vector_store.similarity_search(query, k=4)
     if retrieved_docs:
-        schema_info = retrieved_docs[0].page_content
+        schema_info = " ".join([doc.page_content for doc in retrieved_docs])
         print(f"Retrieved schema info from Chroma: {schema_info}")
         return schema_info
     else:
