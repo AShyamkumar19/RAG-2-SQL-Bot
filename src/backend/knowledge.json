@@ -18,7 +18,7 @@
         ]
     },
     "Table_2": {
-        "Table_Name": "stock",
+        "Table_Name": "stock_data",
         "Table_Description": "This table contains the historical stock data for every stock for different exchanges.",
         "Table_Columns": [
             {

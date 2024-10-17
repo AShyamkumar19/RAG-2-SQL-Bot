@@ -4,6 +4,7 @@ from langchain_community.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 from langchain_openai import OpenAIEmbeddings
+from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 import openai
 from dotenv import load_dotenv
@@ -14,8 +15,7 @@ import json
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-CHROMA_PATH = "src/backend/chroma"
-DATA_PATH = "./data"
+CHROMA_PATH = "./data/chroma"
 JSON_FILE = "src/backend/knowledge.json"
 
 

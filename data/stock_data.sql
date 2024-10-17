@@ -31,11 +31,11 @@ INSERT INTO stock_exchange (name)
 VALUES ('sp500');
 
 
--- SELECT *
--- FROM stock_exchange;
+SELECT *
+FROM stock_exchange;
 
--- SELECT *
--- FROM stock_data;
+SELECT *
+FROM stock_data;
 
 
 -- SHOW DATABASES;
