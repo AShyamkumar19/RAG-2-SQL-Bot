@@ -1,6 +1,6 @@
 from langchain_chroma import Chroma 
 from langchain_openai import OpenAIEmbeddings 
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_community.embeddings.openai import OpenAIEmbeddings
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 import openai
@@ -26,7 +26,7 @@ def get_schema_info_from_chroma(query):
     retrieved_docs = vector_store.similarity_search(query, k=4)
     if retrieved_docs:
         schema_info = "\n".join([f"Table: {doc.metadata['table_name']}\n{doc.page_content}" for doc in retrieved_docs])
-        print(f"Retrieved schema info from Chroma: {schema_info}")
+        print(f"Retrieved schema info from Chroma: {schema_info}") # This can be deleted later, just shows the schema info
         return schema_info
     else:
         return ""
@@ -119,7 +119,7 @@ def validate_sql_query(sql_query):
         return False, str(e)
 
 # Example usage
-natural_language_query = "List all stock exchanges and their corresponding stock data."
+natural_language_query = "What is the average closing price of stocks in the NYSE"
 sql_query, explanation = text_to_sql_with_chroma(natural_language_query)
 
 print("SQL Query:")
