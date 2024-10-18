@@ -1,18 +1,20 @@
 from langchain_chroma import Chroma 
 from langchain_openai import OpenAIEmbeddings 
 from langchain.embeddings.openai import OpenAIEmbeddings
+from dotenv import load_dotenv
 import mysql.connector
 from mysql.connector import Error
 from sqlalchemy import create_engine, text
 import openai
 import os
 
+load_dotenv()
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
-user = os.getenv("DB_USER")
-password = os.getenv("DB_PASSWORD")
-host = os.getenv("DB_HOST")
-database = os.getenv("DB_db")
+user = os.getenv('DB_USER')
+password = os.getenv('DB_PASSWORD')
+host = os.getenv('DB_HOST')
+database = os.getenv('DB_db')
 
 engine = create_engine(f'mysql+pymysql://{user}:{password}@{host}/{database}')
 
@@ -55,20 +57,10 @@ def execute_sql_query(sql_query):
         print("No SQL query to execute.")
         return
     try:
-        connection = mysql.connector.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
-        )
-
-        if connection.is_connected():
-            cursor = connection.cursor()
-            cursor.execute(sql_query)
-            for row in cursor.fetchall():
+        with engine.connect() as connection:
+            result = connection.execute(text(sql_query))
+            for row in result:
                 print(row)
-            cursor.close()
-            connection.close()
     except Exception as e:
         print(f"Error executing SQL: {e}")
 
